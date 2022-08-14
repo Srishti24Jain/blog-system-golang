@@ -1,5 +1,5 @@
 # Blog System
-
+The blog system is completely written in Go lang along with the Clean Architecture.
 ### Pre-requisites
 
 ```
