@@ -1,0 +1,7 @@
+output   = "./api/repository/sqlboiler"
+wipe     = true
+pkgname  = "sqlboiler"
+no-tests = true
+
+[sqlite3]
+dbname = "/home/repo-20/blogs.db"

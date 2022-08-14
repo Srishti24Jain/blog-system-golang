@@ -1,0 +1,764 @@
+openapi: 3.0.3
+info:
+  description: "This is server for blog-platform server."
+  version: "1.0.11"
+  title: "Swagger blog-platform"
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: users
+    description: Everything about users
+  - name: tag
+    description: Everything about tags
+  - name: posts
+    description: Operations about posts
+  - name: comments
+    description: Everything about comments
+paths:
+  /api/create-user:
+    post:
+      tags:
+        - users
+      summary: "Create New User"
+      description: "Create New User"
+      operationId: "CreateUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+  /api/user/{user_id}:
+    get:
+      tags:
+        - users
+      summary: Find user by ID
+      description: Returns a single user
+      operationId: getUserById
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: user not found
+    put:
+      tags:
+        - users
+      summary: Updates a user in the store with form data
+      description: ''
+      operationId: updateUserWithForm
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful user update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - users
+      summary: Deletes a user
+      description: delete a user
+      operationId: deleteUser
+      parameters:
+        - name: user_id
+          in: path
+          description: user id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: No Content
+        '400':
+          description: Invalid user value
+
+  /api/users:
+    get:
+      tags:
+        - users
+      summary: list all users
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/to"
+        - $ref: "#/components/parameters/from"
+      responses:
+        '200':
+          description: list all users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: internal server error
+
+  /api/user/{user_id}/create-post:
+    post:
+      tags:
+        - posts
+      summary: "Create New Post"
+      description: "Create New Post"
+      operationId: "CreatePost"
+      parameters:
+        - name: user_id
+          in: path
+          description: id of the particular user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '405':
+          description: Invalid input
+
+  /api/user/{user_id}/post/{post_id}:
+    get:
+      tags:
+        - posts
+      summary: Find post by ID
+      description: Returns a single post
+      operationId: getPostById
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of particular user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: post_id
+          in: path
+          description: tag id that need to be return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: post not found
+    put:
+      tags:
+        - posts
+      summary: Updates a post in the store with form data
+      description: ''
+      operationId: updatePostWithForm
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of particular user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: post_id
+          in: path
+          description: ID of post that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '200':
+          description: successful post update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - posts
+      summary: Deletes a post
+      description: delete a post
+      operationId: deletePost
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of particular user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: post_id
+          in: path
+          description: post id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: No Content
+        '400':
+          description: Invalid post value
+  /api/posts:
+    get:
+      tags:
+        - posts
+      summary: list all posts
+      parameters:
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/to"
+        - $ref: "#/components/parameters/from"
+      responses:
+        '200':
+          description: list all posts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '500':
+          description: internal server error
+
+  /api/post/{post_id}/create-tag:
+    post:
+      tags:
+        - tag
+      summary: "Create New Tag"
+      description: "Create New Tag"
+      operationId: "CreateTag"
+      parameters:
+        - name: post_id
+          in: path
+          description: id of the particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTag'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTag'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '405':
+          description: Invalid input
+
+  /api/post/{post_id}/tags/{tag_id}:
+    get:
+      tags:
+        - tag
+      summary: Find tag by ID
+      description: Returns a single tag
+      operationId: getTagById
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: tag_id
+          in: path
+          description: tag id that need to be return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: tag not found
+    put:
+      tags:
+        - tag
+      summary: Updates a tag in the store with form data
+      description: ''
+      operationId: updateTagWithForm
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: tag_id
+          in: path
+          description: ID of tag that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+      responses:
+        '200':
+          description: successful tag update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - tag
+      summary: Deletes a tag
+      description: delete a tag
+      operationId: deleteTag
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: tag_id
+          in: path
+          description: tag id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: No Content
+        '400':
+          description: Invalid tag value
+
+  /api/post/{post_id}/add-comment:
+    post:
+      tags:
+        - comments
+      summary: "Create New Comment"
+      description: "Create New Comment"
+      operationId: "CreateComment"
+      parameters:
+        - name: post_id
+          in: path
+          description: id of the particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '405':
+          description: Invalid input
+
+  /api/post/{post_id}/comments/{comment_id}:
+    get:
+      tags:
+        - comments
+      summary: Find comment by ID
+      description: Returns a single comment
+      operationId: getCommentById
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: comment_id
+          in: path
+          description: comment id that need to be return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: tag not found
+    put:
+      tags:
+        - comments
+      summary: Updates a comment in the store with form data
+      description: ''
+      operationId: updateCommentWithForm
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: comment_id
+          in: path
+          description: ID of comment that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateComment'
+      responses:
+        '200':
+          description: successful tag update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - comments
+      summary: Deletes a comment
+      description: delete a comment
+      operationId: deleteComment
+      parameters:
+        - name: post_id
+          in: path
+          description: ID of particular post
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: comment_id
+          in: path
+          description: comment id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: No Content
+        '400':
+          description: Invalid tag value
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: theUser
+        created_at:
+          type: string
+          format: date-time
+          example: 2022-08-14T19:33:16.428870284+05:30
+        updated_at:
+          type: string
+          format: date-time
+          example: 2022-08-14T19:33:16.428870284+05:30
+      xml:
+        name: user
+
+    CreatePost:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "theUser"
+        Content:
+          type: string
+          example: "content"
+        tags_id:
+          type: integer
+          example: 1
+      xml:
+        name: posts
+
+    CreateTag:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "classic"
+      xml:
+        name: tag
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: "classic"
+        post_id:
+          type: integer
+          example: 1
+    TagResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: "classic"
+        post_id:
+          type: integer
+          example: 1
+        post:
+          $ref: '#/components/schemas/Post'
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          example: "classic"
+        content:
+          type: string
+          example: "test blog"
+        author:
+          $ref: '#/components/schemas/User'
+        tags_id:
+          type: integer
+          example: 1
+        author_id:
+          type: integer
+          example: 1
+        tags:
+          type: array
+          items:
+            type: string
+        comments:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          example: 2022-08-14T19:33:16.428870284+05:30
+        updated_at:
+          type: string
+          format: date-time
+          example: 2022-08-14T19:33:16.428870284+05:30
+
+    CreateComment:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "classic"
+        body:
+          type: string
+          example: "comments"
+      xml:
+        name: tag
+
+    CommentResponse:
+      type: object
+      properties:
+        createdId:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "classic"
+        comments:
+          type: string
+          example: "comments"
+        post_id:
+          type: integer
+          example: 1
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: "classic"
+        body:
+          type: string
+          example: "test"
+        post_id:
+          type: integer
+          example: 1
+        post:
+          $ref: '#/components/schemas/Post'
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: Number of records to return
+      schema:
+        type: integer
+        format: int64
+    to:
+      name: to
+      in: query
+      description: first index of the page
+      schema:
+        type: integer
+        format: int64
+    from:
+      name: from
+      in: query
+      description: last index of the previous page
+      schema:
+        type: integer
+        format: int64
